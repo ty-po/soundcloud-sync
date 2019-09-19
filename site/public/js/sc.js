@@ -1,5 +1,6 @@
 (function(){
-
+      
+      // Soundcloud Boilerplate
       var host2widgetBaseUrl = {
         "wt.soundcloud.test" : "wt.soundcloud.test:9200/",
         "wt.soundcloud.com" : "wt.soundcloud.com/player/",
@@ -94,5 +95,4 @@
         });
         return widgetOptions;
       }
-
     }());

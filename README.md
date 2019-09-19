@@ -5,4 +5,4 @@
 
 `cd site` 
 `bundle install`
-`rackup`
+`./start.sh`

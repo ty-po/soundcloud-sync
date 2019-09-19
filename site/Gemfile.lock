@@ -17,8 +17,8 @@ PLATFORMS
   ruby
 
 DEPENDENCIES
-  faye-websocket
-  puma
+  faye-websocket (>= 0.10)
+  puma (>= 2.0)
   rack (>= 1.5)
 
 BUNDLED WITH

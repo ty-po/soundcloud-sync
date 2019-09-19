@@ -1,6 +1,7 @@
 # app.rb
 require 'rack'
 require 'faye/websocket'
+require 'json'
 
 def getFile(path)
   return File.read("./public#{path}")
@@ -14,7 +15,7 @@ class App
 
   def call(env)
     req = Rack::Request.new(env)
-    print req.path_info
+    print "#{req.ip}\t#{req.request_method}\t#{req.path_info}"
     if Faye::WebSocket.websocket?(env)
       puts "\t\tws"
       ws = Faye::WebSocket.new(env, nil, :ping => 30)

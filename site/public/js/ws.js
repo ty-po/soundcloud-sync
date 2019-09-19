@@ -1,3 +1,11 @@
+// WEBSOCKET "API" HERE
+function getUser() {
+}
+function isMaster() {
+}
+function sendEvent(message) {
+}
+
 var socket = new WebSocket("ws://jump0.ty-po.com/ws");
 
 socket.onopen = function(e) {

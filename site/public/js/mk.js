@@ -1,3 +1,14 @@
+//OKAY THIS IS GROSS I KNOW BUT API IS HERE
+function Play() {
+}
+function Pause() {
+}
+function Prev() {
+}
+function Next() {
+}
+
+
 //https://googlechrome.github.io/samples/media-session/audio.html
 if (!('mediaSession' in navigator)) {
     ChromeSamples.setStatus('The Media Session API is not yet available. Try Chrome for Android.');

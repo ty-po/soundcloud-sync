@@ -50,6 +50,9 @@ class App
       when '/js/ws.js'
         [ 200, { "Content-Type" => "text/javascript" }, [ getFile('/js/ws.js') ] ]
 
+      when '/js/mk.js'
+        [ 200, { "Content-Type" => "text/javascript" }, [ getFile('/js/mk.js') ] ]
+
       when '/css/style.css'
         [ 200, { "Content-Type" => "text/css" }, [ getFile('/css/style.css') ] ]
 

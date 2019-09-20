@@ -1,21 +1,16 @@
 //Extending the exsting SC global
-SC.ready  = false;
-
 var iframe = document.querySelector('.iframe');
-iframe.src = "https://w.soundcloud.com/player/?url=http://api.soundcloud.com/users/1539950/favorites"
+initialTarget = "http://api.soundcloud.com/users/1539950/favorites"
+iframe.src = "https://w.soundcloud.com/player/?url=" //+ initialTarget
 var widget = SC.Widget(iframe);
 
 
 SC.play   = function() {
-  if(SC.ready) {
-    widget.play()
-  }
+  widget.play()
 };
 
 SC.pause  = function() {
-  if(SC.ready) {
-    widget.pause()
-  }
+  widget.pause()
 };
 
 SC.seek   = function(time) {};
@@ -25,18 +20,13 @@ SC.lookup = function(url, cb) {
 }
 
 SC.load   = function(url, cb) {
-  if (SC.ready) {
-    SC.ready = false;
-  }
-  widget.load(url, {callback: function(){ SC.ready=true }})
+  widget.load(url, {callback: cb})
 };
 
 
 SC.getMetadata = function(url, cb) {
 
   widget.getCurrentSound(function(raw_metadata) {
-
-    console.log(raw_metadata)
 
     metadata = new MediaMetadata({
       title: raw_metadata.title,
@@ -48,7 +38,5 @@ SC.getMetadata = function(url, cb) {
     });
 
     cb(metadata)
-  
-
   });
 }

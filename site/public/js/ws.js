@@ -12,8 +12,8 @@ var WS = {
     return document.getElementById("leader").checked
   },
 
-  getTrackUrl:  function() {
-  
+  getTrackUrl:  function(cb) {
+    return "https://soundcloud.com/nlechoppa/camelot" 
   },
 
   sendMessage:  function(message) {

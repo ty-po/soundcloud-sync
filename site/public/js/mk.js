@@ -19,53 +19,79 @@ var App = {
 
   audio: document.querySelector('audio'),
 
-  initialize: function() {
-    var url = WS.getTrackUrl()
-    App.load("http://api.soundcloud.com/users/1539950/favorites")
+  playing: false,
 
-    App.audio.play().then(_ => {
-    // Then we assign listeners for media keys
-    navigator.mediaSession.setActionHandler('play', App.play );
-    navigator.mediaSession.setActionHandler('pause', App.pause );
-    navigator.mediaSession.setActionHandler('previoustrack', App.prev );
-    navigator.mediaSession.setActionHandler('nexttrack', App.next );
-    })
+  url: null,
+
+  initialize: function() {
+    App.url = WS.getTrackUrl()
+    App.load(App.url)
+    document.getElementById("init").addEventListener("click", function() {
+
+      App.audio.play().then(_ => {
+      // Then we assign listeners for media keys
+      navigator.mediaSession.setActionHandler('play', App.play );
+      navigator.mediaSession.setActionHandler('pause', App.pause );
+      navigator.mediaSession.setActionHandler('previoustrack', App.prev );
+      navigator.mediaSession.setActionHandler('nexttrack', App.next );
+      })
+      //potentially set a interval to repeatedly play the dummy audio
+      document.getElementById("init").innerHTML = "Soundcloud Sync"
+    });
   },
 
   lookup: function(query, cb) {
     SC.lookup(query, cb)
   },
 
-  load:   function(url, cb) {
-    SC.getMetadata(url, updateMetadata)
-    SC.load(url, cb)
+  queue: function(url) {
+    WS.sendMessage("queue:" + url)
   },
 
+  load:   function(url, cb) {
+    SC.load(url, function(){
+      SC.getMetadata(url, updateMetadata)
+      cb()
+    })
+  },
+
+  //this function dont work for media keys since we cant pause our takeover audio
   play:   function() {
     WS.sendMessage("play");
     console.log("play");
-    navigator.mediaSession.playbackState="playing"
     SC.play();
+    App.audio.play();
   },
 
   pause:  function() {
-    WS.sendMessage("pause");
-    console.log("pause");
-    SC.pause();
+    if(App.playing) {
+      WS.sendMessage("pause");
+      console.log("pause");
+      SC.pause();
+      App.playing = false;
+    }
+    else{
+      WS.sendMessage("play");
+      console.log("play");
+      SC.play();
+      App.playing = true;
+    }
   },
 
   prev:   function() {
     WS.sendMessage("prev");
     console.log("prev");
-    trackNr--
-    App.load('/tracks/' + trackNr, App.play)
+
+    App.url = WS.getTrackUrl()
+    App.load(App.url, App.play)
   },
 
   next:   function() {
     WS.sendMessage("next");
     console.log("next");
-    trackNr++
-    App.load('/tracks/' + trackNr, App.play)
+
+    App.url = WS.getTrackUrl()
+    App.load(App.url, App.play)
   },
 }
 

@@ -1,14 +1,3 @@
-//OKAY THIS IS GROSS I KNOW BUT API IS HERE
-function Play() {
-}
-function Pause() {
-}
-function Prev() {
-}
-function Next() {
-}
-
-
 //https://googlechrome.github.io/samples/media-session/audio.html
 if (!('mediaSession' in navigator)) {
     ChromeSamples.setStatus('The Media Session API is not yet available. Try Chrome for Android.');
@@ -19,26 +8,45 @@ navigator.mediaSession = navigator.mediaSession || {};
 navigator.mediaSession.setActionHandler = navigator.mediaSession.setActionHandler || function() {};
 window.MediaMetadata = window.MediaMetadata || function() {};
 
-function updateMetadata() {
+function updateMetadata(metadata) {
   console.log('updating metadata')
-  navigator.mediaSession.metadata = new MediaMetadata({
-    title: 'Never Gonna Give You Up',
-    artist: 'Rick Astley',
-    album: 'Whenever You Need Somebody',
-    artwork: [
-      { src: 'https://dummyimage.com/96x96',   sizes: '96x96',   type: 'image/png' },
-      { src: 'https://dummyimage.com/128x128', sizes: '128x128', type: 'image/png' },
-      { src: 'https://dummyimage.com/192x192', sizes: '192x192', type: 'image/png' },
-      { src: 'https://dummyimage.com/256x256', sizes: '256x256', type: 'image/png' },
-      { src: 'https://dummyimage.com/384x384', sizes: '384x384', type: 'image/png' },
-      { src: 'https://dummyimage.com/512x512', sizes: '512x512', type: 'image/png' },
-    ]
-  });
+  navigator.mediaSession.metadata = metadata
 }
 
-updateMetadata()
+var trackNr = 293
+SC.load('/tracks/'+trackNr)
+SC.getMetadata('/tracks/'+trackNr, updateMetadata)
 
-navigator.mediaSession.setActionHandler('play', function() { console.log('play') });
-navigator.mediaSession.setActionHandler('pause', function() { console.log('paus') });
-navigator.mediaSession.setActionHandler('previoustrack', function() { console.log('prev') });
-navigator.mediaSession.setActionHandler('nexttrack', function() { console.log('next' ) });
+
+//OKAY THIS IS GROSS I KNOW BUT API IS HERE
+var App = {
+  play:   function() {
+    console.log("play");
+    SC.play();
+  },
+
+  pause:  function() {
+    console.log("pause");
+    SC.pause();
+  },
+
+  prev:   function() {
+    console.log("prev");
+    trackNr--
+    SC.getMetadata('/tracks/'+trackNr, updateMetadata)
+    SC.load('/tracks/'+trackNr, SC.play)
+  },
+
+  next:   function() {
+    console.log("next");
+    trackNr++
+    SC.getMetadata('/tracks/'+trackNr, updateMetadata)
+    SC.load('/tracks/'+trackNr, SC.play)
+  },
+}
+
+// Then we assign listeners for media keys 
+navigator.mediaSession.setActionHandler('play', App.play );
+navigator.mediaSession.setActionHandler('pause', App.pause );
+navigator.mediaSession.setActionHandler('previoustrack', App.prev );
+navigator.mediaSession.setActionHandler('nexttrack', App.next );

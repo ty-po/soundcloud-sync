@@ -1,24 +1,29 @@
 // WEBSOCKET "API" HERE
-function getUser() {
-}
-function isMaster() {
-}
-function sendEvent(message) {
+var WS = {
+  raw:       new WebSocket("ws://jump0.ty-po.com/ws"),
+
+  ready:        false,
+
+  getUserName:  function() {},
+
+  isMaster:     function() {},
+
+  getTrackUrl:  function() {},
+
+  sendMessage:  function() {}
 }
 
-var socket = new WebSocket("ws://jump0.ty-po.com/ws");
-
-socket.onopen = function(e) {
+WS.raw.onopen = function(e) {
   console.log("[open] Connection established");
   console.log("Sending user info");
-  socket.send("{user: 'Test'}");
+  WS.raw.send("{user: 'Test'}");
 };
 
-socket.onmessage = function(event) {
+WS.raw.onmessage = function(event) {
   console.log(`[message] Data received from server: ${event.data}`);
 };
 
-socket.onclose = function(event) {
+WS.raw.onclose = function(event) {
   if (event.wasClean) {
     console.log(`[close] Connection closed cleanly, code=${event.code} reason=${event.reason}`);
   } else {
@@ -28,6 +33,6 @@ socket.onclose = function(event) {
   }
 };
 
-socket.onerror = function(error) {
+WS.raw.onerror = function(error) {
   console.log(`[error] ${error.message}`);
 };

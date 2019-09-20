@@ -7,6 +7,19 @@
   <body>
     <div>
       <h1>Hello Worl</h1>
+      <div>
+        Username:<input type="text" name="username">
+        <input type="checkbox" name="leader">I AM LEADER
+      </div>
+      <div>
+        Track:<input type="text" name="url"><input type="button" value="Load">
+      </div>
+      <div> 
+        <input type="button" value="Play" onclick="App.play()">
+        <input type="button" value="Pause" onclick="App.pause()">
+        <input type="button" value="Prev" onclick="App.prev()">
+        <input type="button" value="Next"onclick="App.next()">
+      </div>
     </div>
     <script src="https://connect.soundcloud.com/sdk/sdk-3.3.2.js"></script>
     <script type="text/javascript" src="/js/sc.js"></script>

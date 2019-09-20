@@ -8,17 +8,23 @@
     <div>
       <h1>Hello Worl</h1>
       <div>
-        Username:<input type="text" name="username">
-        <input type="checkbox" name="leader">I AM LEADER
+        Username:<input type="text" id="username">
+        <input type="checkbox" id="leader">I AM LEADER
       </div>
       <div>
-        Track:<input type="text" name="url"><input type="button" value="Load">
+        Track:<input type="text" id="url"><input type="button" value="Load" onclick="App.lookup(document.getElementById('url').value, App.load)">
       </div>
       <div> 
         <input type="button" value="Play" onclick="App.play()">
         <input type="button" value="Pause" onclick="App.pause()">
         <input type="button" value="Prev" onclick="App.prev()">
         <input type="button" value="Next"onclick="App.next()">
+      </div>
+      <div>
+        <p id=title></p>
+        <p id=artist></p>
+        <p id=album></p>
+        <img id=artwork></img>
       </div>
     </div>
     <script src="https://connect.soundcloud.com/sdk/sdk-3.3.2.js"></script>

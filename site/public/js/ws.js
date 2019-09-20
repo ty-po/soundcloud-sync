@@ -4,13 +4,23 @@ var WS = {
 
   ready:        false,
 
-  getUserName:  function() {},
+  getUserName:  function() {
+    return document.getElementById('username').value
+  },
 
-  isMaster:     function() {},
+  isMaster:     function() {
+    return document.getElementById("leader").checked
+  },
 
-  getTrackUrl:  function() {},
+  getTrackUrl:  function() {
+  
+  },
 
-  sendMessage:  function() {}
+  sendMessage:  function(message) {
+    var user = WS.getUserName();
+    var broadcast = WS.isMaster();
+    
+  }
 }
 
 WS.raw.onopen = function(e) {
@@ -21,6 +31,9 @@ WS.raw.onopen = function(e) {
 
 WS.raw.onmessage = function(event) {
   console.log(`[message] Data received from server: ${event.data}`);
+  if(WS.isMaster()) {
+    //switch message
+  }
 };
 
 WS.raw.onclose = function(event) {

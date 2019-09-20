@@ -27,6 +27,12 @@ SC.load   = function(url, cb) {
   })
 };
 
+SC.lookup = function(query, cb) {
+  SC.get(query).then(function(result) {
+    console.log(result)
+  })
+}
+
 SC.getMetadata = function(url, cb) {
 
   SC.get(url).then(function(raw_metadata) {

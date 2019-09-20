@@ -57,6 +57,9 @@ class App
       when '/css/style.css'
         [ 200, { "Content-Type" => "text/css" }, [ getFile('/css/style.css') ] ]
 
+      when '/silence.mp3'
+        [ 200, { "Content-Type" => "audio/mp3" }, [ getFile('/silence.mp3') ] ]
+
       else
         [ 404, { "Content-Type" => "text/html" }, [ 'Nah Brah' ] ]
 

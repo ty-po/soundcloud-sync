@@ -12,18 +12,30 @@ function updateMetadata(metadata) {
   console.log('updating metadata')
   //update media preview metadata
   navigator.mediaSession.metadata = metadata
-  //make my gross ui populate
-  document.getElementById("title").innerHTML = metadata.title;
-  document.getElementById('artist').innerHTML = metadata.artist;
-  document.getElementById('album').innerHTML = metadata.album;
-  document.getElementById('artwork').src = metadata.artwork[0].src;
 }
 
 //OKAY THIS IS GROSS I KNOW BUT API IS HERE
 var App = {
+
+  audio: document.querySelector('audio'),
+
+  initialize: function() {
+    var url = WS.getTrackUrl()
+    App.load("http://api.soundcloud.com/users/1539950/favorites")
+
+    App.audio.play().then(_ => {
+    // Then we assign listeners for media keys
+    navigator.mediaSession.setActionHandler('play', App.play );
+    navigator.mediaSession.setActionHandler('pause', App.pause );
+    navigator.mediaSession.setActionHandler('previoustrack', App.prev );
+    navigator.mediaSession.setActionHandler('nexttrack', App.next );
+    })
+  },
+
   lookup: function(query, cb) {
     SC.lookup(query, cb)
   },
+
   load:   function(url, cb) {
     SC.getMetadata(url, updateMetadata)
     SC.load(url, cb)
@@ -32,6 +44,7 @@ var App = {
   play:   function() {
     WS.sendMessage("play");
     console.log("play");
+    navigator.mediaSession.playbackState="playing"
     SC.play();
   },
 
@@ -56,13 +69,8 @@ var App = {
   },
 }
 
-// Do Inital load
-var url = WS.getTrackUrl()
-var trackNr = 293
-App.load('/tracks/'+trackNr)
 
-// Then we assign listeners for media keys 
-navigator.mediaSession.setActionHandler('play', App.play );
-navigator.mediaSession.setActionHandler('pause', App.pause );
-navigator.mediaSession.setActionHandler('previoustrack', App.prev );
-navigator.mediaSession.setActionHandler('nexttrack', App.next );
+// bind init to app ready
+widget.bind("ready", function(eventData) {
+  App.initialize()
+});

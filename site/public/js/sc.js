@@ -1,41 +1,40 @@
 //Extending the exsting SC global
 SC.ready  = false;
 
+var iframe = document.querySelector('.iframe');
+iframe.src = "https://w.soundcloud.com/player/?url=http://api.soundcloud.com/users/1539950/favorites"
+var widget = SC.Widget(iframe);
+
+
 SC.play   = function() {
   if(SC.ready) {
-    SC.track.play()
+    widget.play()
   }
 };
 
 SC.pause  = function() {
   if(SC.ready) {
-    SC.track.pause()
+    widget.pause()
   }
 };
 
 SC.seek   = function(time) {};
 
+SC.lookup = function(url, cb) {
+  cb(url)
+}
+
 SC.load   = function(url, cb) {
   if (SC.ready) {
     SC.ready = false;
-    SC.track.kill();
   }
-  SC.stream(url).then(function(player) {
-    SC.track = player;
-    SC.ready = true;
-    cb();
-  })
+  widget.load(url, {callback: function(){ SC.ready=true }})
 };
 
-SC.lookup = function(query, cb) {
-  SC.get(query).then(function(result) {
-    console.log(result)
-  })
-}
 
 SC.getMetadata = function(url, cb) {
 
-  SC.get(url).then(function(raw_metadata) {
+  widget.getCurrentSound(function(raw_metadata) {
 
     console.log(raw_metadata)
 
@@ -53,9 +52,3 @@ SC.getMetadata = function(url, cb) {
 
   });
 }
-
-SC.initialize({
-	client_id: '5519289b32d3c193afafd4c2388a29d7',
-	redirect_uri: 'https://example.com/callback'
-});
-

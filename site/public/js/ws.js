@@ -32,7 +32,8 @@ var WS = {
         WS.queue = data.data;
         if(WS.queue.length > 0 && WS.queueIndex == -1) {
           WS.queueIndex = 0
-          App.initialize();
+          App.url = WS.current()
+          App.load(App.url)
         }
         else {
           WS.queueIndex = data.queueIndex

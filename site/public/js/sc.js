@@ -4,6 +4,10 @@ initialTarget = "http://api.soundcloud.com/users/1539950/favorites"
 iframe.src = "https://w.soundcloud.com/player/?url=" //+ initialTarget
 var widget = SC.Widget(iframe);
 
+SC.initialize({
+  client_id: '5519289b32d3c193afafd4c2388a29d7',
+  redirect_uri: 'http://jump0.ty-po.com/callback'
+});
 
 SC.play   = function() {
   widget.play()
@@ -16,7 +20,12 @@ SC.pause  = function() {
 SC.seek   = function(time) {};
 
 SC.lookup = function(url, cb) {
-  cb(url)
+  SC.resolve(url).then(function(data) {
+    for (var track in data.tracks)
+    {
+      cb(data.tracks[track].permalink_url)
+    }
+  })
 }
 
 SC.load   = function(url, cb) {

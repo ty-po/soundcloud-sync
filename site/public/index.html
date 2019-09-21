@@ -12,7 +12,12 @@
         <input type="checkbox" id="leader">I AM LEADER
       </div>
       <div>
-        Track:<input type="text" id="url"><input type="button" value="Queue" onclick="App.enqueue(document.getElementById('url').value)">
+        Playlist:<input type="text" id="playlist">
+        <input type="button" value="Load Playlist" onclick="App.lookup(document.getElementById('playlist').value, App.enqueue)">
+      </div>
+      <div>
+        Track:<input type="text" id="url">
+        <input type="button" value="Queue" onclick="App.enqueue(document.getElementById('url').value)">
       </div>
       <div> 
         <input type="button" class="control" value="Play" onclick="if(WS.isMaster()) { App.play() }">
@@ -25,6 +30,7 @@
           <source src="/silence.mp3" type="audio/mp3"/>
       </audio>
 		<div>
+    <script src="https://connect.soundcloud.com/sdk/sdk-3.3.2.js"></script>
     <script src="https://w.soundcloud.com/player/api.js"></script>
     <script type="text/javascript" src="/js/sc.js"></script>
     <script type="text/javascript" src="/js/ws.js"></script>

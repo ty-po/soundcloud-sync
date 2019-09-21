@@ -66,7 +66,7 @@ var App = {
   },
 
   enqueue: function(url) {
-    WS.sendMessage("enqueue", url)
+    WS.sendMessage("enqueue", url, true)
   },
 
   load:   function(url, cb) {

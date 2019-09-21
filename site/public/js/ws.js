@@ -23,35 +23,40 @@ var WS = {
 
     WS.raw.onmessage = function(event) {
       console.log(`[message] Data received from server: ${event.data}`);
+
+      data = JSON.parse(event.data)
+
+      console.log(data)
+
       if(!WS.isMaster()) {
-        //switch message
+      
       }
     };
-
+    //set interval to request 
   },
 
   queue: [],
 
-  queueIndex: null,
+  queueIndex: -1,
 
   current: function() {
-    if(WS.queueIndex != null) {
+    if(WS.queueIndex != -1) {
       return WS.queue[queueIndex]
     }
   },
 
   prev: function() { 
-    if(WS.queueIndex != null) {
+    if(WS.queueIndex > 0) {
       WS.queueIndex -= 1
-      return WS.current()
     }
+    return WS.current()
   },
 
   next: function() {
-    if(WS.queueIndex != null) {
+    if(WS.queueIndex < WS.queue.length - 1) {
       WS.queueIndex += 1
-      return WS.current()
     }
+    return WS.current()
   },
 
   raw:          new WebSocket("ws://jump0.ty-po.com/ws"),
@@ -66,14 +71,10 @@ var WS = {
     return document.getElementById("leader").checked
   },
 
-  getTrackUrl:  function(cb) {
-    return "https://soundcloud.com/nlechoppa/camelot" 
-  },
-
-  sendMessage:  function(type, data) {
+  sendMessage:  function(type, data, broadcast) {
     var message = {
       user: WS.getUserName(),
-      broadcast: WS.isMaster(),
+      broadcast: (WS.isMaster() || broadcast) ? true : false,
       type: type,
       data: data
     }

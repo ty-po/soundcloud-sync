@@ -28,8 +28,35 @@ var WS = {
 
       console.log(data)
 
-      if(!WS.isMaster()) {
-      
+      if(data.type === "queue") {
+        WS.queue = data.data;
+        if(WS.queue.length > 0 && WS.queueIndex == -1) {
+          WS.queueIndex = 0
+          App.initialize();
+        }
+        else {
+          WS.queueIndex = data.queueIndex
+        }
+      } 
+      else if(!WS.isMaster() && data.broadcast) {
+        WS.queueIndex = data.queueIndex
+        switch (data.type) {
+          case "play":
+            App.play();
+            break;
+          case "pause":
+            App.pause();
+            break;
+          case "prev":
+            App.prev();
+            break;
+          case "next":
+            App.next();
+            break;
+          case "seek":
+            App.seek(data.data);
+            break;
+        }
       }
     };
     //set interval to request 
@@ -41,7 +68,7 @@ var WS = {
 
   current: function() {
     if(WS.queueIndex != -1) {
-      return WS.queue[queueIndex]
+      return WS.queue[WS.queueIndex]
     }
   },
 
@@ -76,7 +103,8 @@ var WS = {
       user: WS.getUserName(),
       broadcast: (WS.isMaster() || broadcast) ? true : false,
       type: type,
-      data: data
+      data: data,
+      queueIndex: WS.queueIndex
     }
     var serialized = JSON.stringify(message)
     console.log(serialized)

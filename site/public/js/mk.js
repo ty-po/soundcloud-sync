@@ -45,14 +45,22 @@ var App = {
   },
 
   queue: function(url) {
-    WS.sendMessage("queue:" + url)
+    WS.sendMessage("queue", url)
   },
 
   load:   function(url, cb) {
     SC.load(url, function(){
       SC.getMetadata(url, updateMetadata)
-      cb()
+      if(cb) {
+        cb()
+      }
     })
+  },
+  
+  seek:   function(time) {
+    console.log("seek " + time)
+    WS.sendMessage("seek:"+time)
+    SC.seek(time)
   },
 
   //this function dont work for media keys since we cant pause our takeover audio
@@ -61,6 +69,7 @@ var App = {
     console.log("play");
     SC.play();
     App.audio.play();
+    App.playing = true;
   },
 
   pause:  function() {
@@ -71,10 +80,7 @@ var App = {
       App.playing = false;
     }
     else{
-      WS.sendMessage("play");
-      console.log("play");
-      SC.play();
-      App.playing = true;
+      App.play();
     }
   },
 
@@ -99,4 +105,12 @@ var App = {
 // bind init to app ready
 widget.bind("ready", function(eventData) {
   App.initialize()
+});
+
+// bind finish to next track gross and specific TODO: refactor
+widget.bind("finish", function() { 
+
+  if(WS.isMaster()) {
+    App.next()
+  }
 });

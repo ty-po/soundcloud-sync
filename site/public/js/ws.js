@@ -1,20 +1,6 @@
 // WEBSOCKET "API" HERE
 var WS = {
   init:         function() {
-
-    WS.raw.onopen = function(e) {
-      console.log("[open] Connection established");
-      console.log("Sending user info");
-      WS.sendMessage("open")
-    };
-
-    WS.raw.onmessage = function(event) {
-      console.log(`[message] Data received from server: ${event.data}`);
-      if(!WS.isMaster()) {
-        //switch message
-      }
-    };
-
     WS.raw.onclose = function(event) {
       if (event.wasClean) {
         console.log(`[close] Connection closed cleanly, code=${event.code} reason=${event.reason}`);
@@ -28,7 +14,44 @@ var WS = {
     WS.raw.onerror = function(error) {
       console.log(`[error] ${error.message}`);
     };
+    
+    WS.raw.onopen = function(e) {
+      console.log("[open] Connection established");
+      console.log("Sending user info");
+      WS.sendMessage("open")
+    };
 
+    WS.raw.onmessage = function(event) {
+      console.log(`[message] Data received from server: ${event.data}`);
+      if(!WS.isMaster()) {
+        //switch message
+      }
+    };
+
+  },
+
+  queue: [],
+
+  queueIndex: null,
+
+  current: function() {
+    if(WS.queueIndex != null) {
+      return WS.queue[queueIndex]
+    }
+  },
+
+  prev: function() { 
+    if(WS.queueIndex != null) {
+      WS.queueIndex -= 1
+      return WS.current()
+    }
+  },
+
+  next: function() {
+    if(WS.queueIndex != null) {
+      WS.queueIndex += 1
+      return WS.current()
+    }
   },
 
   raw:          new WebSocket("ws://jump0.ty-po.com/ws"),

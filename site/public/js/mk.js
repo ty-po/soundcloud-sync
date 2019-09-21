@@ -24,16 +24,37 @@ var App = {
   url: null,
 
   initialize: function() {
-    App.url = WS.getTrackUrl()
+    App.url = WS.current()
     App.load(App.url)
     document.getElementById("init").addEventListener("click", function() {
 
       App.audio.play().then(_ => {
-      // Then we assign listeners for media keys
-      navigator.mediaSession.setActionHandler('play', App.play );
-      navigator.mediaSession.setActionHandler('pause', App.pause );
-      navigator.mediaSession.setActionHandler('previoustrack', App.prev );
-      navigator.mediaSession.setActionHandler('nexttrack', App.next );
+        // Then we assign listeners for media keys
+        navigator.mediaSession.setActionHandler('play', function() {
+          if(WS.isMaster()) {
+            App.play
+          }
+        });
+        navigator.mediaSession.setActionHandler('pause', function() {
+          if(WS.isMaster()) {
+            if(App.playing) {
+              App.pause();
+            }
+            else{
+              App.play();
+            } 
+          }
+        });
+        navigator.mediaSession.setActionHandler('previoustrack', function() {
+          if(WS.isMaster()) {
+            App.prev()
+          }
+        });
+        navigator.mediaSession.setActionHandler('nexttrack', function() {
+          if(WS.isMaster()) {
+            App.next()
+          } 
+        });
       })
       //potentially set a interval to repeatedly play the dummy audio
       document.getElementById("init").innerHTML = "Soundcloud Sync"
@@ -44,8 +65,8 @@ var App = {
     SC.lookup(query, cb)
   },
 
-  queue: function(url) {
-    WS.sendMessage("queue", url)
+  enqueue: function(url) {
+    WS.sendMessage("enqueue", url)
   },
 
   load:   function(url, cb) {
@@ -73,22 +94,17 @@ var App = {
   },
 
   pause:  function() {
-    if(App.playing) {
-      WS.sendMessage("pause");
-      console.log("pause");
-      SC.pause();
-      App.playing = false;
-    }
-    else{
-      App.play();
-    }
+    WS.sendMessage("pause");
+    console.log("pause");
+    SC.pause();
+    App.playing = false;
   },
 
   prev:   function() {
     WS.sendMessage("prev");
     console.log("prev");
 
-    App.url = WS.getTrackUrl()
+    App.url = WS.prev()
     App.load(App.url, App.play)
   },
 
@@ -96,7 +112,7 @@ var App = {
     WS.sendMessage("next");
     console.log("next");
 
-    App.url = WS.getTrackUrl()
+    App.url = WS.next()
     App.load(App.url, App.play)
   },
 }
@@ -109,7 +125,6 @@ widget.bind("ready", function(eventData) {
 
 // bind finish to next track gross and specific TODO: refactor
 widget.bind("finish", function() { 
-
   if(WS.isMaster()) {
     App.next()
   }

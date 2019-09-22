@@ -28,9 +28,15 @@ var WS = {
 
       console.log(data)
 
-      if(data.type === "queue") {
+
+      //These two if blocks need some reworking
+      if(data.type === "shuffle" || data.type === "clear") {
+        WS.queueIndex = data.queueIndex;
+      }
+
+      if(data.type === "queue" || data.type === "shuffle" || data.type === "clear") {
         WS.queue = data.data;
-        if(WS.queue.length > 0 && WS.queueIndex == -1) {
+        if(WS.queue.length > 0 && WS.queueIndex == -1) { //if the queue is empty/uninit, start it
           WS.queueIndex = 0
           App.url = WS.current()
           App.load(App.url)
@@ -38,7 +44,7 @@ var WS = {
         else {
           WS.queueIndex = data.queueIndex
         }
-      } 
+      }
       else if(!WS.isMaster() && data.broadcast) {
         WS.queueIndex = data.queueIndex
         switch (data.type) {

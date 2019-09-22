@@ -69,6 +69,14 @@ var App = {
     WS.sendMessage("enqueue", url, true)
   },
 
+  clearQueue: function() {
+    WS.sendMessage("clear", null, true)
+  },
+
+  shuffleQueue: function() {
+    WS.sendMessage("shuffle", null, true)
+  },
+
   load:   function(url, cb) {
     SC.load(url, function(){
       SC.getMetadata(url, updateMetadata)

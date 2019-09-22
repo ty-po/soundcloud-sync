@@ -42,6 +42,16 @@ class App
           end
           data["data"] = @queue
           data["type"] = "queue"
+        when "clear"
+          @queue = []
+          data["data"] = @queue
+          data["type"] = "queue"
+          data["queueIndex"] = -1
+        when "shuffle"
+          @queue = @queue.shuffle
+          data["data"] = @queue
+          data["type"] = "queue"
+          data["queueIndex"] = -1
         end
 
         serialized = data.to_json()

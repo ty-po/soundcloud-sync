@@ -45,12 +45,12 @@ class App
         when "clear"
           @queue = []
           data["data"] = @queue
-          data["type"] = "queue"
+          data["type"] = "clear"
           data["queueIndex"] = -1
         when "shuffle"
           @queue = @queue.shuffle
           data["data"] = @queue
-          data["type"] = "queue"
+          data["type"] = "shuffle"
           data["queueIndex"] = -1
         end
 

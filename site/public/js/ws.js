@@ -28,21 +28,20 @@ var WS = {
 
       console.log(data)
 
+      if(["queue", "shuffle", "clear"].includes(data.type)) {
+        var initialQueueIndex = WS.queueIndex
 
-      //These two if blocks need some reworking
-      if(data.type === "shuffle" || data.type === "clear") {
-        WS.queueIndex = data.queueIndex;
-      }
-
-      if(data.type === "queue" || data.type === "shuffle" || data.type === "clear") {
         WS.queue = data.data;
-        if(WS.queue.length > 0 && WS.queueIndex == -1) { //if the queue is empty/uninit, start it
+        WS.queueIndex = data.queueIndex;
+        if(WS.queue.length > 0 && WS.queueIndex == -1) { //if the queue has an item and iterator is uninit, set to 0
           WS.queueIndex = 0
           App.url = WS.current()
           App.load(App.url)
         }
-        else {
-          WS.queueIndex = data.queueIndex
+
+        if(["shuffle","clear"].includes(data.type)) {
+          App.url = WS.current()
+          App.load(App.url)
         }
       }
       else if(!WS.isMaster() && data.broadcast) {

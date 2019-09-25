@@ -23,10 +23,9 @@ SC.seek   = function(time) {
 
 SC.lookup = function(url, cb) {
   SC.resolve(url).then(function(data) {
-    for (var track in data.tracks)
-    {
-      cb(data.tracks[track].permalink_url)
-    }
+    data.tracks.forEach(function(track, index) {
+      cb(track.permalink_url)
+    })
   })
 }
 
@@ -34,14 +33,45 @@ SC.load   = function(url, cb) {
   widget.load(url, {callback: cb})
 };
 
+SC.metadataCache = {};
+
 SC.getMetadata = function(url, cb) {
-  var reduced = url.replace("https://soundcloud.com/", "").split('/')
-  var artist = reduced[0]
-  var track = reduced[1]
-  if(track) {
-    track = track.split('?')[0]
+  
+  var generateBarebonesMetadata = function(inputUrl) {
+    var reduced = url.replace("https://soundcloud.com/", "").split('/')
+    var artist = reduced[0]
+    var track = reduced[1]
+    if(track) {
+      track = track.split('?')[0]
+    }
+    return {
+      source: 'soundcloud',
+      artist: artist, 
+      track: track,
+      artwork: '403'
+    }
   }
-  cb({'source': 'soundcloud','artist': artist, 'track': track}) //fuck soundcloud and their undocumented unsupported api
+
+
+  if(SC.metadataCache[url]) {
+    cb(SC.metadataCache[url])
+  }
+  else {
+    SC.resolve(url)
+    .then(function(data) {
+      metadata = {
+        source: 'soundcloud',
+        artist: data.user.username,
+        track: data.title,
+        artwork: data.artwork_url
+      }
+      SC.metadataCache[url] = metadata
+      cb(metadata)
+    })
+    .catch(function(error) {
+      cb(generateBarebonesMetadata(url));
+    })
+  }
 }
 
 SC.getCurrentMetadata = function(cb) {

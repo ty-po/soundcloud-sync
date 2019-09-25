@@ -86,26 +86,51 @@ var App = {
       td.style.fontWeight = rowIndex === playingIndex ? "bold" : "normal"
       tr.appendChild(td)
 
-      for (var key in metadata) {
+      Object.keys(metadata).forEach(function(key, _) {
         td = document.createElement('td')
         td.innerHTML = metadata[key]
         td.style.fontWeight = rowIndex === playingIndex ? "bold" : "normal"
         tr.appendChild(td)
         //handle case for artwork array
-      }
+      })
       return tr
+    }
+
+    // thanks to https://www.w3schools.com/howto/howto_js_sort_table.asp
+    var sortTable = function() {
+      var table = document.getElementById('queue')
+      var rows, switching, i, x, y, shouldSwitch;
+      switching = true;
+      while (switching) {
+        switching = false;
+        rows = table.rows;
+        for (i = 0; i < (rows.length - 1); i++) {
+          shouldSwitch = false;
+          x = rows[i].getElementsByTagName("TD")[0];
+          y = rows[i + 1].getElementsByTagName("TD")[0];
+          if (Number(x.innerHTML) > Number(y.innerHTML)) {
+            shouldSwitch = true;
+            break;
+          }
+        }
+        if (shouldSwitch) {
+          rows[i].parentNode.insertBefore(rows[i + 1], rows[i]);
+          switching = true;
+        }
+      }
     }
 
     var table = document.getElementById('queue')
     table.innerHTML = ""
 
     if (i != -1) {
-      for(var j in queue) {
-        SC.getMetadata(queue[j], function(metadata) {
-          var row = createTableRow(metadata, parseInt(j), parseInt(i))
+      queue.forEach(function(item, index) {
+        SC.getMetadata(item, function(metadata) {
+          var row = createTableRow(metadata, index, parseInt(i))
           table.appendChild(row)
-        })  
-      }
+        })
+      })
+      setTimeout(sortTable, 2000)
     }
   },
 

@@ -43,6 +43,8 @@ var WS = {
           App.url = WS.current()
           App.load(App.url)
         }
+        
+        App.renderQueue(WS.queue, WS.queueIndex);
       }
       else if(!WS.isMaster() && data.broadcast) {
         WS.queueIndex = data.queueIndex
@@ -82,6 +84,7 @@ var WS = {
     if(WS.queueIndex > 0) {
       WS.queueIndex -= 1
     }
+    App.renderQueue(WS.queue, WS.queueIndex)
     return WS.current()
   },
 
@@ -89,6 +92,7 @@ var WS = {
     if(WS.queueIndex < WS.queue.length - 1) {
       WS.queueIndex += 1
     }
+    App.renderQueue(WS.queue, WS.queueIndex)
     return WS.current()
   },
 

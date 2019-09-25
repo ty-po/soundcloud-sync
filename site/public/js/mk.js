@@ -77,9 +77,43 @@ var App = {
     WS.sendMessage("shuffle", null, true)
   },
 
+  renderQueue: function(queue, i) {
+    var createTableRow = function(metadata, rowIndex, playingIndex) {
+      var tr = document.createElement('tr')
+      
+      console.log(rowIndex === playingIndex, rowIndex, playingIndex)
+
+      var td = document.createElement('td')
+      td.innerHTML = rowIndex + 1
+      td.style.fontWeight = rowIndex === playingIndex ? "bold" : "normal"
+      tr.appendChild(td)
+
+      for (var key in metadata) {
+        td = document.createElement('td')
+        td.innerHTML = metadata[key]
+        td.style.fontWeight = rowIndex === playingIndex ? "bold" : "normal"
+        tr.appendChild(td)
+        //handle case for artwork array
+      }
+      return tr
+    }
+
+    var table = document.getElementById('queue')
+    table.innerHTML = ""
+
+    if (i != -1) {
+      for(var j in queue) {
+        SC.getMetadata(queue[j], function(metadata) {
+          var row = createTableRow(metadata, parseInt(j), parseInt(i))
+          table.appendChild(row)
+        })  
+      }
+    }
+  },
+
   load:   function(url, cb) {
     SC.load(url, function(){
-      SC.getMetadata(url, updateMetadata)
+      SC.getCurrentMetadata(updateMetadata)
       if(cb) {
         cb()
       }

@@ -32,8 +32,12 @@ SC.load   = function(url, cb) {
   widget.load(url, {callback: cb})
 };
 
-
 SC.getMetadata = function(url, cb) {
+  var reduced = url.replace("https://soundcloud.com/", "").split('/')
+  cb({'source': 'soundcloud','artist': reduced[0], 'track': reduced[1]}) //fuck soundcloud and their undocumented unsupported api
+}
+
+SC.getCurrentMetadata = function(cb) {
 
   widget.getCurrentSound(function(raw_metadata) {
 

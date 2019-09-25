@@ -91,8 +91,17 @@ var App = {
         td = document.createElement('td')
         td.innerHTML = metadata[key]
         td.style.fontWeight = rowIndex === playingIndex ? "bold" : "normal"
+        if(key === "artwork") {
+          var img = document.createElement('img')
+          img.src = metadata[key] == 403 
+            ? "https://image.flaticon.com/icons/png/128/2034/2034602.png" 
+            : metadata[key]
+          img.height = 100
+          img.width = 100
+          td.innerHTML = ""
+          td.appendChild(img)
+        }
         tr.appendChild(td)
-        //handle case for artwork array
       })
       return tr
     }

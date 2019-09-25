@@ -17,7 +17,9 @@ SC.pause  = function() {
   widget.pause()
 };
 
-SC.seek   = function(time) {};
+SC.seek   = function(time) {
+  
+};
 
 SC.lookup = function(url, cb) {
   SC.resolve(url).then(function(data) {
@@ -34,7 +36,12 @@ SC.load   = function(url, cb) {
 
 SC.getMetadata = function(url, cb) {
   var reduced = url.replace("https://soundcloud.com/", "").split('/')
-  cb({'source': 'soundcloud','artist': reduced[0], 'track': reduced[1].split('?')[0]}) //fuck soundcloud and their undocumented unsupported api
+  var artist = reduced[0]
+  var track = reduced[1]
+  if(track) {
+    track = track.split('?')[0]
+  }
+  cb({'source': 'soundcloud','artist': artist, 'track': track}) //fuck soundcloud and their undocumented unsupported api
 }
 
 SC.getCurrentMetadata = function(cb) {

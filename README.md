@@ -4,6 +4,10 @@
 ## setup
 install ruB
 
+setup nginx to forward default port 9292
+
+`gem install bundler`
+
 `cd site` 
 `bundle install`
 `./start.sh`

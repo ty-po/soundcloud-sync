@@ -16,10 +16,17 @@ body, html {
   }
 
   h1 {
-    font-weight: normal;
+    font-family: 'Be Vietnam'. sans-serif;
+    font-weight: 400;
     text-align: center;
   }
 
+  .test {
+    font-family: 'Be Vietnam', sans-serif;
+    font-weight: 300;
+    font-size: 1.5em;
+  }
+  
   dl, dt {
     margin-bottom: 15px;
   }

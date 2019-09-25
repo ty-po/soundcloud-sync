@@ -43,6 +43,7 @@ sudo apt-get install ruby2.3-dev
 
 - store most recent state server side so we can send it on init
 - server side user identification and determination of who is allowed to broadcast
+- connected user list
 - typescript for front end
 - unit testing for both services
 - one line build/run process and directory monitoring

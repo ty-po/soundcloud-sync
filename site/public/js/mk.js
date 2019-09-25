@@ -77,6 +77,7 @@ var App = {
     WS.sendMessage("shuffle", null, true)
   },
 
+  renderQueueInProgress: false,
   renderQueue: function(queue, i) {
     var createTableRow = function(metadata, rowIndex, playingIndex) {
       var tr = document.createElement('tr')
@@ -120,17 +121,37 @@ var App = {
       }
     }
 
+    var checkCompletion = function() {
+      if(queue.length === table.rows.length) {
+        App.renderQueueInProgress = false;
+        sortTable()
+      }
+      else {
+        setTimeout(checkCompletion, 1000)
+      }
+    }
+
     var table = document.getElementById('queue')
     table.innerHTML = ""
-
-    if (i != -1) {
-      queue.forEach(function(item, index) {
-        SC.getMetadata(item, function(metadata) {
-          var row = createTableRow(metadata, index, parseInt(i))
-          table.appendChild(row)
+    
+    var createTable = function() {
+      if (i != -1) {
+        App.renderQueueInProgress = true;
+        queue.forEach(function(item, index) {
+          SC.getMetadata(item, function(metadata) {
+            var row = createTableRow(metadata, index, parseInt(i))
+            table.appendChild(row)
+          })
         })
-      })
-      setTimeout(sortTable, 2000)
+        setTimeout(checkCompletion, 1000)
+      } 
+    }
+
+    if(!App.queueRenderInProgress) {
+      createTable()
+    }
+    else {
+      setTimeout(function() { App.renderQueue(queue, i) }, 1000)
     }
   },
 

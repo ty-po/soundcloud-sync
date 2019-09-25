@@ -80,8 +80,6 @@ var App = {
   renderQueue: function(queue, i) {
     var createTableRow = function(metadata, rowIndex, playingIndex) {
       var tr = document.createElement('tr')
-      
-      console.log(rowIndex === playingIndex, rowIndex, playingIndex)
 
       var td = document.createElement('td')
       td.innerHTML = rowIndex + 1

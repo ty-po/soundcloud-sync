@@ -34,7 +34,7 @@ SC.load   = function(url, cb) {
 
 SC.getMetadata = function(url, cb) {
   var reduced = url.replace("https://soundcloud.com/", "").split('/')
-  cb({'source': 'soundcloud','artist': reduced[0], 'track': reduced[1]}) //fuck soundcloud and their undocumented unsupported api
+  cb({'source': 'soundcloud','artist': reduced[0], 'track': reduced[1].split('?')[0]}) //fuck soundcloud and their undocumented unsupported api
 }
 
 SC.getCurrentMetadata = function(cb) {

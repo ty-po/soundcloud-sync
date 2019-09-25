@@ -94,6 +94,9 @@ class App
       when '/silence.mp3'
         [ 200, { "Content-Type" => "audio/mp3" }, [ getFile('/silence.mp3') ] ]
 
+      when '/favicon.png'
+        [ 200, { "Content-Type" => "image/png" }, [ getFile('/favicon.png') ] ]
+      
       else
         [ 404, { "Content-Type" => "text/html" }, [ 'Nah Brah' ] ]
 

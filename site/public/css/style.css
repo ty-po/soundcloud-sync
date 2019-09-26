@@ -27,6 +27,14 @@ body, html {
     font-size: 1.5em;
   }
   
+  .nav {
+    font-family: 'Mansalva', sans-serif;
+    font-size: 3.25em;
+    color: #F64C72;
+    text-align: center;
+    background-color: #2F2FA2;
+  }
+
   dl, dt {
     margin-bottom: 15px;
   }

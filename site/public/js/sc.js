@@ -70,11 +70,26 @@ SC.load   = function(url, cb) {
 
 SC.metadataCache = {};
 
+SC.fetchMetadataCache = function(url) {
+  var localstore = window.localStorage.getItem('soundcloud-metadata-cache')
+  if(localstore) {
+    SC.metadataCache = JSON.parse(localstore)
+  }
+  if(url in SC.metadataCache) {
+    return SC.metadataCache[url]
+  }
+  else {
+    return null
+  }
+}
+
+
 SC.updateMetadataCache = function(metadata) {
   //push metadata
   if(metadata.url) {
     SC.metadataCache[metadata.url] = metadata
   }
+  window.localStorage.setItem('soundcloud-metadata-cache', JSON.stringify(SC.metadataCache));
 }
 
 SC.marshalMetadata = function(data) {
@@ -107,8 +122,8 @@ SC.getMetadata = function(url, cb) {
   }
 
 
-  if(SC.metadataCache[url]) {
-    cb(SC.metadataCache[url])
+  if(SC.fetchMetadataCache(url)) {
+    cb(SC.fetchMetadataCache(url))
   }
   else {
     SC.resolve(url)

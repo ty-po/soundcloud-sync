@@ -30,8 +30,6 @@ sudo apt-get install ruby2.3-dev
 
 ## todo
 
-- rewrite metadata + playlist load to abuse the widget
-- volume control
 - sync to timecode on load
 - store most recent state server side so we can send it on init
 
@@ -45,6 +43,7 @@ sudo apt-get install ruby2.3-dev
 
 - queue send list instead of song by song
 - server side user identification and determination of who is allowed to broadcast
+- store song metadata server side, potentially track play info and added user too?
 - connected user list
 - typescript for front end
 - unit testing for both services

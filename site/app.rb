@@ -12,6 +12,8 @@ class App
   def initialize
     @sockets = Set.new
     @queue = []
+    @queue_index = -1
+    @position = 0
   end
 
   def call(env)
@@ -28,14 +30,16 @@ class App
       end
 
       ws.on :message do |event|
-        puts "socket\tmessage\t#{event.data}"
+        #puts "socket\tmessage\t#{event.data}"
 
         data = JSON.parse(event.data)
 
         case data["type"]
-        when "open"
+        when "open", "sync"
           data["data"] = @queue
-          data["type"] = "queue"
+          data["type"] = "init"
+          data["position"] = @position
+          data["queueIndex"] = @queue_index
         when "enqueue"
           if data["data"] != "" #can dedupe here if we want eventually
             @queue.push(data["data"])
@@ -44,19 +48,29 @@ class App
           data["type"] = "queue"
         when "clear"
           @queue = []
+          @queue_index = -1
+          @position = 0
           data["data"] = @queue
           data["type"] = "clear"
           data["queueIndex"] = -1
         when "shuffle"
           @queue = @queue.shuffle
+          @queue_index = -1
+          @position = 0
           data["data"] = @queue
           data["type"] = "shuffle"
           data["queueIndex"] = -1
+        when "position"
+          @queue_index = data["queueIndex"]
+          @position = data["data"]
+
         end
 
         serialized = data.to_json()
 
-        puts serialized
+        if data["type"] != "position"
+          puts serialized
+        end
 
         if data["broadcast"]
           @sockets.each { |wss| wss.send(serialized) }

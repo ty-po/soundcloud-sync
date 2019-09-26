@@ -30,8 +30,8 @@ sudo apt-get install ruby2.3-dev
 
 ## todo
 
-- sync to timecode on load
-- store most recent state server side so we can send it on init
+- timecode sync; reduce position frequency to per second and sync actively
+- scrubbing
 
 
 - split front and backend servers
@@ -55,6 +55,5 @@ sudo apt-get install ruby2.3-dev
 
 - youtube integration
 - spotify integration (needs authentication so like a db probably and a more legit webserver)
-- scrubbing and timecode sync
 - prettyfy
 - discord integration

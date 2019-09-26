@@ -1,6 +1,9 @@
 // WEBSOCKET "API" HERE
 var WS = {
   init:         function() {
+
+    WS.raw = new WebSocket("ws://jump0.ty-po.com/ws")
+
     WS.raw.onclose = function(event) {
       if (event.wasClean) {
         console.log(`[close] Connection closed cleanly, code=${event.code} reason=${event.reason}`);
@@ -26,9 +29,21 @@ var WS = {
 
       data = JSON.parse(event.data)
 
-      console.log(data)
+      if(!["position"].includes(data.type)) {
+        console.log(data)
+      }
 
-      if(["queue", "shuffle", "clear"].includes(data.type)) {
+      if(["init", "sync"].includes(data.type)) {
+        WS.queue = data.data
+        WS.queueIndex = data.queueIndex
+        App.url = WS.current();
+        var position = data.position
+        App.load(App.url, function() {
+          console.log(data)
+          App.seek(position)
+        })
+      }
+      else if(["queue", "shuffle", "clear"].includes(data.type)) {
         var initialQueueIndex = WS.queueIndex
 
         WS.queue = data.data;
@@ -43,12 +58,17 @@ var WS = {
           App.url = WS.current()
           App.load(App.url)
         }
-        
+
         App.renderQueue();
       }
       else if(!WS.isMaster() && data.broadcast) {
         WS.queueIndex = data.queueIndex
         switch (data.type) {
+          case "position":
+            if(!App.playing) {
+              App.play();
+            }
+            break;
           case "play":
             App.play();
             break;
@@ -96,7 +116,7 @@ var WS = {
     return WS.current()
   },
 
-  raw:          new WebSocket("ws://jump0.ty-po.com/ws"),
+  raw: null,
 
   ready:        false,
 
@@ -121,5 +141,3 @@ var WS = {
     WS.raw.send(serialized)
   }
 }
-
-WS.init()

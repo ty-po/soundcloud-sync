@@ -18,7 +18,7 @@ SC.pause  = function() {
 };
 
 SC.seek   = function(time) {
-  
+  widget.seekTo(time) 
 };
 
 SC.setVolume = function(vol) {
@@ -33,7 +33,6 @@ SC.lookup = function(url, cb) {
 
 SC.loadPlaylist = function(playlist_url, cb) {
   var capturePlaylist = function(playlist) { 
-    console.log(playlist)
     
     var playlistLoaded = true
 
@@ -44,6 +43,7 @@ SC.loadPlaylist = function(playlist_url, cb) {
     })
   
     if(playlistLoaded) {
+      SC.fetchMetadataCache()
       playlist.forEach(function(track, key) { 
         metadata = SC.marshalMetadata(track)
         track_url = track.permalink_url
@@ -144,6 +144,7 @@ SC.getCurrentMetadata = function(cb) {
 
   widget.getCurrentSound(function(raw_metadata) {
 
+    SC.fetchMetadataCache()
     SC.updateMetadataCache(SC.marshalMetadata(raw_metadata))
 
     metadata = new MediaMetadata({

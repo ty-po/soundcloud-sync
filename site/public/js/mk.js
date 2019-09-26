@@ -15,6 +15,26 @@ function updateMetadata(metadata) {
   App.renderQueue()
 }
 
+// bind init to app ready
+widget.bind("ready", function(eventData) {
+  console.log("ready")
+  App.initialize()
+});
+
+// bind finish to next track gross and specific TODO: refactor
+widget.bind("finish", function() { 
+  if(WS.isMaster()) {
+    App.next()
+  }
+});
+
+//send timing data up to server regularly
+widget.bind("playProgress", function(data) {
+  if(WS.isMaster()) {
+    WS.sendMessage("position", data.currentPosition)
+  }
+})
+
 //OKAY THIS IS GROSS I KNOW BUT API IS HERE
 var App = {
 
@@ -25,9 +45,10 @@ var App = {
   url: null,
 
   initialize: function() {
-    App.url = WS.current()
-    App.load(App.url)
+
     document.getElementById("init").addEventListener("click", function() {
+
+      WS.init()
 
       App.audio.play().then(_ => {
         // Then we assign listeners for media keys
@@ -214,11 +235,14 @@ var App = {
   },
 
   load:   function(url, cb) {
+    console.log("loading")
     SC.load(url, function(){
       SC.getCurrentMetadata(updateMetadata)
       if(cb) {
         cb()
       }
+
+      App.playing = false;
     })
   },
   
@@ -230,19 +254,23 @@ var App = {
 
   //this function dont work for media keys since we cant pause our takeover audio
   play:   function() {
+    App.audio.play();
+
     WS.sendMessage("play");
     console.log("play");
     App.setVolume();
     SC.play();
-    App.audio.play();
     App.playing = true;
+
   },
 
   pause:  function() {
+
     WS.sendMessage("pause");
     console.log("pause");
     SC.pause();
     App.playing = false;
+
   },
 
   prev:   function() {
@@ -261,16 +289,3 @@ var App = {
     App.load(App.url, App.play)
   },
 }
-
-
-// bind init to app ready
-widget.bind("ready", function(eventData) {
-  App.initialize()
-});
-
-// bind finish to next track gross and specific TODO: refactor
-widget.bind("finish", function() { 
-  if(WS.isMaster()) {
-    App.next()
-  }
-});

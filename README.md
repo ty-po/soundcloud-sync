@@ -34,6 +34,7 @@ sudo apt-get install ruby2.3-dev
 - scrubbing
 - skip to song button
 - soundcloud link as part of image in table
+- pause music when master disconnects
 
 
 - split front and backend servers

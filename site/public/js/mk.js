@@ -62,7 +62,8 @@ var App = {
     });
   },
 
-  setVolume(vol) {
+  setVolume() {
+    var vol = document.getElementById("volume").value
     SC.setVolume(vol)
   },
 
@@ -228,6 +229,7 @@ var App = {
   play:   function() {
     WS.sendMessage("play");
     console.log("play");
+    App.setVolume();
     SC.play();
     App.audio.play();
     App.playing = true;

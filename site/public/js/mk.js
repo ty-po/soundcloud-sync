@@ -72,7 +72,10 @@ var App = {
   },
 
   loadPlaylist: function(url) {
-    SC.loadPlaylist(url, App.enqueue)
+    SC.loadPlaylist(url, function(track) {
+      App.enqueue(track)
+      App.load(WS.current())
+    })
   },
 
   enqueue: function(url) {

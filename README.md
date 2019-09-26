@@ -32,6 +32,8 @@ sudo apt-get install ruby2.3-dev
 
 - timecode sync; reduce position frequency to per second and sync actively
 - scrubbing
+- skip to song button
+- soundcloud link as part of image in table
 
 
 - split front and backend servers

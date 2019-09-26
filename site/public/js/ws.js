@@ -22,7 +22,7 @@ var WS = {
     };
 
     WS.raw.onmessage = function(event) {
-      console.log(`[message] Data received from server: ${event.data}`);
+      //console.log(`[message] Raw data received from server: ${event.data}`);
 
       data = JSON.parse(event.data)
 
@@ -44,7 +44,7 @@ var WS = {
           App.load(App.url)
         }
         
-        App.renderQueue(WS.queue, WS.queueIndex);
+        App.renderQueue();
       }
       else if(!WS.isMaster() && data.broadcast) {
         WS.queueIndex = data.queueIndex

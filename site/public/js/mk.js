@@ -12,6 +12,7 @@ function updateMetadata(metadata) {
   console.log('updating metadata')
   //update media preview metadata
   navigator.mediaSession.metadata = metadata
+  App.renderQueue()
 }
 
 //OKAY THIS IS GROSS I KNOW BUT API IS HERE
@@ -82,7 +83,11 @@ var App = {
   },
 
   renderQueueInProgress: false,
-  renderQueue: function(queue, i) {
+  renderQueueQueued: false,
+  renderQueue: function() {
+    var queue = WS.queue
+    var i = WS.queueIndex
+
     var createTableRow = function(metadata, rowIndex, playingIndex) {
       var tr = document.createElement('tr')
 
@@ -144,36 +149,59 @@ var App = {
     }
 
     var checkCompletion = function() {
-      if(queue.length === table.rows.length) {
+      current_queue_length = WS.queue.length
+      var table = document.getElementById('queue')
+
+      // render all songs on playlist
+      //if(queue.length === table.rows.length)
+      //only render next songs and currently playing
+      if(queue.length - i === table.rows.length) {
+        //mark this render as done and sort
         App.renderQueueInProgress = false;
         sortTable()
+        
+        //if our currently loaded queue is larger than the working queue rerun the render
+        if (current_queue_length !== queue.length) {
+          App.renderQueue()
+        }
+        
+        //if we have an outstanding rerender, run it and unmark rerender bit 
+        else if(App.renderQueueQueued) {
+          App.renderQueue()
+          App.renderQueueQueued = false
+        }
+        
       }
       else {
-        setTimeout(checkCompletion, 1000)
+        setTimeout(checkCompletion, 250)
       }
     }
-
-    var table = document.getElementById('queue')
-    table.innerHTML = ""
     
     var createTable = function() {
+      var table = document.getElementById('queue')
+      table.innerHTML = ""
       if (i != -1) {
         App.renderQueueInProgress = true;
         queue.forEach(function(item, index) {
           SC.getMetadata(item, function(metadata) {
-            var row = createTableRow(metadata, index, parseInt(i))
-            table.appendChild(row)
+            // render all songs on playlist
+            //if(true) {
+            //only render next songs and current song
+            if(index >= i) {
+              var row = createTableRow(metadata, index, i)
+              table.appendChild(row)
+            }
           })
         })
         setTimeout(checkCompletion, 1000)
       } 
     }
 
-    if(!App.queueRenderInProgress) {
+    if(!App.renderQueueInProgress) {
       createTable()
     }
     else {
-      setTimeout(function() { App.renderQueue(queue, i) }, 1000)
+      App.renderQueueQueued = true
     }
   },
 

@@ -31,8 +31,8 @@ sudo apt-get install ruby2.3-dev
 ## todo
 
 - rewrite metadata + playlist load to abuse the widget
-- remove sc api cause it's so useless it is laughable 
-- fix metadata errors causing concurrent renderQueue calls
+- queue send list instead of song by song
+- volume control
 - sync to timecode on load
 - split front and backend servers
 - in front end split into services `TransportController` >messages> `Websocket` (play,pause,skip,next)

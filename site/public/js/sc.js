@@ -23,10 +23,41 @@ SC.seek   = function(time) {
 
 SC.lookup = function(url, cb) {
   SC.resolve(url).then(function(data) {
-    data.tracks.forEach(function(track, index) {
-      cb(track.permalink_url)
-    })
+    cb(data)
   })
+}
+
+SC.loadPlaylist = function(playlist_url, cb) {
+  var capturePlaylist = function(playlist) { 
+    console.log(playlist)
+    
+    var playlistLoaded = true
+
+    playlist.forEach(function(track, key) {
+      if(!track.permalink_url) {
+        playlistLoaded = false
+      }
+    })
+  
+    if(playlistLoaded) {
+      playlist.forEach(function(track, key) { 
+        metadata = SC.marshalMetadata(track)
+        track_url = track.permalink_url
+        SC.updateMetadataCache(metadata)
+        cb(track_url)
+      })
+    }
+    else {
+      setTimeout(getSounds, 1000)
+    }
+  };
+  
+  var getSounds = function() {
+    widget.getSounds(capturePlaylist)
+  };
+
+
+  widget.load(playlist_url, {callback: getSounds})
 }
 
 SC.load   = function(url, cb) {
@@ -34,6 +65,24 @@ SC.load   = function(url, cb) {
 };
 
 SC.metadataCache = {};
+
+SC.updateMetadataCache = function(metadata) {
+  //push metadata
+  if(metadata.url) {
+    SC.metadataCache[metadata.url] = metadata
+  }
+}
+
+SC.marshalMetadata = function(data) {
+  var metadata = {
+    source: 'soundcloud',
+    artist: data.user.username,
+    track: data.title,
+    artwork: data.artwork_url,
+    url: data.permalink_url
+  }
+  return metadata
+}
 
 SC.getMetadata = function(url, cb) {
   
@@ -48,7 +97,8 @@ SC.getMetadata = function(url, cb) {
       source: 'soundcloud',
       artist: artist, 
       track: track,
-      artwork: '403'
+      artwork: '403',
+      url: inputUrl
     }
   }
 
@@ -59,17 +109,14 @@ SC.getMetadata = function(url, cb) {
   else {
     SC.resolve(url)
     .then(function(data) {
-      metadata = {
-        source: 'soundcloud',
-        artist: data.user.username,
-        track: data.title,
-        artwork: data.artwork_url
-      }
-      SC.metadataCache[url] = metadata
+      metadata = SC.marshalMetadata(data)
+      SC.updateMetadataCache(metadata)
       cb(metadata)
     })
     .catch(function(error) {
-      cb(generateBarebonesMetadata(url));
+      metadata = generateBarebonesMetadata(url)
+      SC.updateMetadataCache(metadata)
+      cb(metadata);
     })
   }
 }
@@ -77,6 +124,8 @@ SC.getMetadata = function(url, cb) {
 SC.getCurrentMetadata = function(cb) {
 
   widget.getCurrentSound(function(raw_metadata) {
+
+    SC.updateMetadataCache(SC.marshalMetadata(raw_metadata))
 
     metadata = new MediaMetadata({
       title: raw_metadata.title,
@@ -86,7 +135,7 @@ SC.getCurrentMetadata = function(cb) {
         { src: raw_metadata.artwork_url,   sizes: '100x100',   type: 'image/jpg' },
       ]
     });
-
+    
     cb(metadata)
   });
 }

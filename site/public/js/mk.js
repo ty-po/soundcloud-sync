@@ -65,6 +65,10 @@ var App = {
     SC.lookup(query, cb)
   },
 
+  loadPlaylist: function(url) {
+    SC.loadPlaylist(url, App.enqueue)
+  },
+
   enqueue: function(url) {
     WS.sendMessage("enqueue", url, true)
   },
@@ -93,7 +97,7 @@ var App = {
         td.style.fontWeight = rowIndex === playingIndex ? "bold" : "normal"
         if(key === "artwork") {
           var img = document.createElement('img')
-          img.src = metadata[key] == 403 
+          img.src = ["403", "null", null].includes(metadata[key])
             ? "https://image.flaticon.com/icons/png/128/2034/2034602.png" 
             : metadata[key]
           img.height = 100
@@ -101,6 +105,15 @@ var App = {
           td.innerHTML = ""
           td.appendChild(img)
         }
+        if(key === "url") {
+          var a = document.createElement('a')
+          a.href = metadata[key]
+          a.target = "_blank"
+          a.innerHTML = "link"
+          td.innerHTML = ""
+          td.appendChild(a)
+        }
+
         tr.appendChild(td)
       })
       return tr

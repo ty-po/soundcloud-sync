@@ -21,6 +21,10 @@ SC.seek   = function(time) {
   
 };
 
+SC.setVolume = function(vol) {
+  widget.setVolume(vol);
+};
+
 SC.lookup = function(url, cb) {
   SC.resolve(url).then(function(data) {
     cb(data)

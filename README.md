@@ -31,9 +31,11 @@ sudo apt-get install ruby2.3-dev
 ## todo
 
 - rewrite metadata + playlist load to abuse the widget
-- queue send list instead of song by song
 - volume control
 - sync to timecode on load
+- store most recent state server side so we can send it on init
+
+
 - split front and backend servers
 - in front end split into services `TransportController` >messages> `Websocket` (play,pause,skip,next)
 `Websocket` >commands> `PlayerInstance` (Interface for SoundCloud//Spotify//YouTube)
@@ -41,7 +43,7 @@ sudo apt-get install ruby2.3-dev
 `Client` >queries> `PlayerInstance` (metadata, artwork, playlist contents)
 `Client` >messages> `Websocket` (playlist manipulation, queue, clear, shuffle)
 
-- store most recent state server side so we can send it on init
+- queue send list instead of song by song
 - server side user identification and determination of who is allowed to broadcast
 - connected user list
 - typescript for front end

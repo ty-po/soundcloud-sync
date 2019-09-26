@@ -62,6 +62,10 @@ var App = {
     });
   },
 
+  setVolume(vol) {
+    SC.setVolume(vol)
+  },
+
   lookup: function(query, cb) {
     SC.lookup(query, cb)
   },

@@ -41,7 +41,7 @@
         <input type="button" class="control btn btn-primary" value="Pause" onclick="if(WS.isMaster()) { App.pause() }">
         <input type="button" class="control btn btn-primary" value="Prev" onclick="if(WS.isMaster()) { App.prev() }">
         <input type="button" class="control btn btn-primary" value="Next"onclick="if(WS.isMaster()) { App.next() }">
-        <div id="volume">
+        <div id="volume-controls">
          Volume:<input type="range" min="1" max="100" value="50" class="slider" id="volume" onchange="App.setVolume()">
         </div>
       </div>

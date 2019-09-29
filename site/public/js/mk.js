@@ -244,6 +244,7 @@ var App = {
 
   load:   function(url, cb) {
     console.log("loading")
+    App.synced = false
     SC.load(url, function(){
       SC.getCurrentMetadata(updateMetadata)
       if(cb) {
@@ -254,6 +255,8 @@ var App = {
     })
   },
   
+  
+  synced: false,
   sync:   function(trackTime, broadcastTime) {
 
     var playerTime = SC.getTime(function(playerTime) {
@@ -264,18 +267,20 @@ var App = {
       var playerOffset = playerTime - trackTime
 
       var targetTime = trackTime + (eventOffset) //+ App.syncAdjustment
+      var syncAdjustment = eventOffset - playerOffset
 
       //I think I want these to be equal
-      console.log(eventOffset)
-      console.log(playerOffset)
-
-      var syncAdjustment = eventOffset - playerOffset
+      console.log(eventOffset, playerOffset)
       console.log(syncAdjustment)
-      if (syncAdjustment > 75) {
+
+      if (syncAdjustment > 75) { // if we are way off likely the track is still loading
         App.seek(targetTime)
       }
-      else if(syncAdjustment > 50) {
+      else if(Math.abs(syncAdjustment) > 6 && !App.synced) {
         App.seek(targetTime + syncAdjustment)
+      }
+      else {
+        App.synced = true
       }
     })
   },

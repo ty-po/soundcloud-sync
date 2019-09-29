@@ -1,6 +1,6 @@
 //https://googlechrome.github.io/samples/media-session/audio.html
 if (!('mediaSession' in navigator)) {
-    ChromeSamples.setStatus('The Media Session API is not yet available. Try Chrome for Android.');
+    alert('The Media Session API is not yet available. Try Chrome for Android.');
 }
 
 // This prevents unnecessary errors when Media Session API is not available.
@@ -29,9 +29,17 @@ widget.bind("finish", function() {
 });
 
 //send timing data up to server regularly
+var syncFrames = 50;
+var syncCounter = 0;
 widget.bind("playProgress", function(data) {
   if(WS.isMaster()) {
-    WS.sendMessage("position", data.currentPosition)
+    //WS.sendMessage("position", data.currentPosition)
+
+    syncCounter += 1
+    if(syncCounter >= syncFrames) {
+      WS.sendMessage("sync", data.currentPosition)
+      syncCounter = 0
+    }
   }
 })
 
@@ -246,6 +254,32 @@ var App = {
     })
   },
   
+  sync:   function(trackTime, broadcastTime) {
+
+    var playerTime = SC.getTime(function(playerTime) {
+      var clientTime = Date.now();
+      console.log(trackTime, broadcastTime, playerTime, clientTime)
+
+      var eventOffset = clientTime - broadcastTime
+      var playerOffset = playerTime - trackTime
+
+      var targetTime = trackTime + (eventOffset) //+ App.syncAdjustment
+
+      //I think I want these to be equal
+      console.log(eventOffset)
+      console.log(playerOffset)
+
+      var syncAdjustment = eventOffset - playerOffset
+      console.log(syncAdjustment)
+      if (syncAdjustment > 75) {
+        App.seek(targetTime)
+      }
+      else if(syncAdjustment > 50) {
+        App.seek(targetTime + syncAdjustment)
+      }
+    })
+  },
+
   seek:   function(time) {
     console.log("seek " + time)
     WS.sendMessage("seek:"+time)

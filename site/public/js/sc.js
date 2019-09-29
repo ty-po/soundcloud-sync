@@ -21,6 +21,10 @@ SC.seek   = function(time) {
   widget.seekTo(time) 
 };
 
+SC.getTime = function(cb) {
+  widget.getPosition(cb)
+};
+
 SC.setVolume = function(vol) {
   widget.setVolume(vol);
 };

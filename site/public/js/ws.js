@@ -33,14 +33,16 @@ var WS = {
         console.log(data)
       }
 
-      if(["init", "sync"].includes(data.type)) {
+      if(["init"].includes(data.type)) {
         WS.queue = data.data
         WS.queueIndex = data.queueIndex
         App.url = WS.current();
+        console.log("here")
         var position = data.position
         App.load(App.url, function() {
+          console.log("here too")
           console.log(data)
-          App.seek(position)
+          App.sync(position, data.time)
         })
       }
       else if(["queue", "shuffle", "clear"].includes(data.type)) {
@@ -83,6 +85,12 @@ var WS = {
             break;
           case "seek":
             App.seek(data.data);
+            break;
+          case "sync":
+            if(!App.playing) {
+              App.play();
+            }
+            App.sync(data.data, data.time)
             break;
         }
       }
@@ -134,7 +142,8 @@ var WS = {
       broadcast: (WS.isMaster() || broadcast) ? true : false,
       type: type,
       data: data,
-      queueIndex: WS.queueIndex
+      queueIndex: WS.queueIndex,
+      time: Date.now()
     }
     var serialized = JSON.stringify(message)
     console.log(serialized)

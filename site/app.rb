@@ -35,7 +35,7 @@ class App
         data = JSON.parse(event.data)
 
         case data["type"]
-        when "open", "sync"
+        when "open"
           data["data"] = @queue
           data["type"] = "init"
           data["position"] = @position
@@ -43,6 +43,9 @@ class App
         when "enqueue"
           if data["data"] != "" #can dedupe here if we want eventually
             @queue.push(data["data"])
+            if @queue_index = -1
+              @queue_index = 0
+            end
           end
           data["data"] = @queue
           data["type"] = "queue"
@@ -60,7 +63,7 @@ class App
           data["data"] = @queue
           data["type"] = "shuffle"
           data["queueIndex"] = -1
-        when "position"
+        when "position", "sync"
           @queue_index = data["queueIndex"]
           @position = data["data"]
 

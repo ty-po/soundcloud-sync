@@ -32,6 +32,7 @@ widget.bind("finish", function() {
 var syncFrames = 50;
 var syncCounter = 0;
 widget.bind("playProgress", function(data) {
+  App.renderPosition(data.currentPosition)
   if(WS.isMaster()) {
     //WS.sendMessage("position", data.currentPosition)
 
@@ -45,6 +46,9 @@ widget.bind("playProgress", function(data) {
 
 //OKAY THIS IS GROSS I KNOW BUT API IS HERE
 var App = {
+
+  currentPosition: 0,
+  currentDuration: 0,
 
   audio: document.querySelector('audio'),
 
@@ -88,6 +92,22 @@ var App = {
       })
       //potentially set a interval to repeatedly play the dummy audio
       document.getElementById("init").innerHTML = "Soundcloud Sync"
+
+      var seekOnClick = function(e) {
+        var rect = e.target.getBoundingClientRect();
+        var size = e.target.clientWidth
+        var x = e.clientX - rect.left;
+        //var y = e.clientY - rect.top;
+        console.log(x,size)
+
+        var targetTimecode = App.currentDuration * (x / size)
+
+        if(WS.isMaster()) {
+          App.seek(targetTimecode)
+        }
+      }
+
+      document.getElementById("progress").addEventListener("click", seekOnClick, false);
     });
   },
 
@@ -117,6 +137,16 @@ var App = {
 
   shuffleQueue: function() {
     WS.sendMessage("shuffle", null, true)
+  },
+
+  renderPosition: function(position) {
+    SC.getDuration(function(data) {
+      App.currentDuration = data
+    })
+
+    App.currentPosition = position
+
+    document.getElementById("progress-bar").style.width = App.currentPosition/App.currentDuration * 100 + "%"
   },
 
   renderQueueInProgress: false,
@@ -283,7 +313,9 @@ var App = {
     })
   },
 
+
   seek:   function(time) {
+    App.synced = false
     console.log("seek " + time)
     WS.sendMessage("seek:"+time)
     SC.seek(time)

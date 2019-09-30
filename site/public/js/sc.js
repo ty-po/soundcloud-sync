@@ -21,6 +21,10 @@ SC.seek   = function(time) {
   widget.seekTo(time) 
 };
 
+SC.getDuration = function(cb) {
+  widget.getDuration(cb)
+};
+
 SC.getTime = function(cb) {
   widget.getPosition(cb)
 };

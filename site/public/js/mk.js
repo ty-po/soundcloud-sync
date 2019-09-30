@@ -288,6 +288,7 @@ var App = {
   
   
   synced: false,
+  syncOffset: 0,
   sync:   function(trackTime, broadcastTime) {
 
     var playerTime = SC.getTime(function(playerTime) {
@@ -307,7 +308,9 @@ var App = {
         App.synced = false
       }
       else if(Math.abs(syncAdjustment) > 5 && !App.synced) {
-        App.seek(targetTime + syncAdjustment)
+        App.syncOffset = (syncAdjustment + App.syncOffset)
+        if(App.debug) console.log("Offset", App.syncOffset)
+        App.seek(targetTime + App.syncOffset)
       }
       else {
         App.synced = true

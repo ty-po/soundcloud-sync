@@ -9,7 +9,7 @@ navigator.mediaSession.setActionHandler = navigator.mediaSession.setActionHandle
 window.MediaMetadata = window.MediaMetadata || function() {};
 
 function updateMetadata(metadata) {
-  //console.log('updating metadata')
+  console.log('updating metadata')
   //update media preview metadata
   navigator.mediaSession.metadata = metadata
   App.renderQueue()

@@ -72,6 +72,10 @@ var WS = {
 
         App.renderQueue();
       }
+      else if(["open", "close"].includes(data.type)) {
+        WS.userList = data.data
+        WS.renderUserList()
+      }
       else if(!WS.isMaster() && data.broadcast) {
         WS.queueIndex = data.queueIndex
         switch (data.type) {
@@ -137,14 +141,39 @@ var WS = {
 
   ready:        false,
 
+  username: "",
+
   userList: [],
 
+  renderUserList: function() {
+    var userlist = document.getElementById('user-list')
+    userlist.innerHTML = WS.userList
+  },
+
   getUserName:  function() {
-    return document.getElementById('username').value
+    var username = window.localStorage.getItem('username')
+    var userfield = document.getElementById('username')
+
+    if (userfield.value === "") {   
+      if(username) {
+        userfield.value = username;
+      }
+      else {
+        userfield.value = "notleader" + Math.floor(Math.random() * 100)
+      }
+    }
+
+    if (username != userfield.value) {
+      window.localStorage.setItem('username', userfield.value)
+    }
+
+    WS.username = userfield.value
+
+    return WS.username
   },
 
   isMaster:     function() {
-    return document.getElementById("leader").checked
+    return document.getElementById("leader").checked && !WS.getUserName().includes("notleader")
   },
 
   sendMessage:  function(type, data, broadcast) {

@@ -14,6 +14,7 @@ class App
     @queue = []
     @queue_index = -1
     @position = 0
+    @users = []
   end
 
   def call(env)
@@ -37,6 +38,12 @@ class App
         case data["type"]
         when "open"
           data["broadcast"] = true
+          @users.push(data["user"])
+          data["data"] = @users
+        when "close"
+          data["broadcast"] = true
+          @users.delete(data["user"])
+          data["data"] = @users
         when "init"
           data["data"] = @queue
           data["position"] = @position
@@ -68,9 +75,9 @@ class App
         when "position", "sync"
           @queue_index = data["queueIndex"]
           @position = data["data"]
-
         end
-
+        
+        data["queueIndex"] = @queue_index
         serialized = data.to_json()
 
         if data["type"] != "position"

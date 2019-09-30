@@ -7,30 +7,30 @@
   <link rel="shortcut icon" type="image/png" href="/favicon.png">
   <link href="https://fonts.googleapis.com/css?family=Be+Vietnam:300,400&display=swap" rel="stylesheet">
   <link href="https://fonts.googleapis.com/css?family=Mansalva&display=swap" rel="stylesheet">
-  <!-- Bootstrap 4.3.1  -->
+  <!-- HEY! STOP LOOKING AT OUR SPAGHETTI CODE!  -->
   <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-HSMxcRTRxnN+Bdg0JdbxYKrThecOKuH5zCYotlSAcp1+c8xmyTe9GYg1l9a69psu" crossorigin="anonymous">
   <body>
     <div>
 
-      <nav class="navbar navbar-dark bg-dark nav">
-      <span class="navbar navbar-dark bg-dark">SoundCloud Sync</span>
+      <nav>
+      <span>SoundCloud Sync</span>
       </nav>     
       <h1 id="init">Click Here to Start</h1>
 
 
       <div class="users">
-        <span class="test">Username: </span><input type="text" id="username">
-        <input type="checkbox" id="leader" ><span class="test">I AM LEADER</span>
+        <span class="field-names">Username: </span><input type="text" id="username">
+        <input type="checkbox" id="leader" ><span class="field-names">I AM LEADER</span>
       </div>
 
       <div id="soundcloud-playlist">
         <div>
-          <span class="test">Playlist: </span><input type="text" id="playlist">
+          <span class="field-names">Playlist: </span><input type="text" id="playlist">
           <input type="button" value="Load Playlist" onclick="App.loadPlaylist(document.getElementById('playlist').value, App.enqueue)">
         </div>
 
         <div>
-          <span class="test">Track: </span><input type="text" id="url">
+          <span class="field-names">Track: </span><input type="text" id="url">
           <input type="button" value="Queue" onclick="App.enqueue(document.getElementById('url').value)">
         </div>
       </div>

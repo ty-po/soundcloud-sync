@@ -4,6 +4,7 @@ var WS = {
 
   init:         function() {
 
+    //WS.raw = new WebSocket("ws://" + window.location.hostname + "/ws")
     WS.raw = new WebSocket("ws://jump0.ty-po.com/ws")
 
     WS.raw.onclose = function(event) {
@@ -22,7 +23,7 @@ var WS = {
     
     WS.raw.onopen = function(e) {
       console.log("[open] Connection established");
-      WS.sendMessage("open", WS.getUserName, true)
+      WS.sendMessage("open")
     };
 
     WS.raw.onmessage = function(event) {

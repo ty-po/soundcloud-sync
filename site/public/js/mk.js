@@ -292,6 +292,7 @@ var App = {
   
   
   synced: false,
+  syncOffset: 0,
   sync:   function(trackTime, broadcastTime) {
 
     var playerTime = SC.getTime(function(playerTime) {
@@ -311,7 +312,9 @@ var App = {
         App.synced = false
       }
       else if(Math.abs(syncAdjustment) > 5 && !App.synced) {
-        App.seek(targetTime + syncAdjustment)
+        App.syncOffset = (syncAdjustment + App.syncOffset)
+        if(App.debug) console.log("Offset", App.syncOffset)
+        App.seek(targetTime + App.syncOffset)
       }
       else {
         App.synced = true
@@ -327,7 +330,7 @@ var App = {
     SC.seek(time)
   },
 
-  //this function dont work for media keys since we cant pause our takeover audio
+  //this function dont work explicitly for media keys since we cant pause our takeover audio
   play:   function() {
     App.audio.play();
 

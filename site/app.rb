@@ -35,15 +35,16 @@ class App
         data = JSON.parse(event.data)
 
         case data["type"]
-        when "open"
+        when "open", "init"
           data["data"] = @queue
           data["type"] = "init"
           data["position"] = @position
           data["queueIndex"] = @queue_index
+          data["broadcast"] = false
         when "enqueue"
           if data["data"] != "" #can dedupe here if we want eventually
             @queue.push(data["data"])
-            if @queue_index = -1
+            if @queue_index == -1
               @queue_index = 0
             end
           end

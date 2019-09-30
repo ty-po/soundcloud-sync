@@ -19,8 +19,12 @@
      </div>
 
       <div class="users">
+        <table id="user-list">
+        </table>
         <span class="field-names">Username: </span><input type="text" id="username">
         <input type="checkbox" id="leader" ><span class="field-names">I AM LEADER</span>
+        <table id="user-list">
+        </table>
       </div>
 
       <div id="soundcloud-playlist">
@@ -48,7 +52,7 @@
           </div>
         </div>
         <div id="volume-controls">
-         Volume:<input type="range" min="1" max="100" value="50" class="slider" id="volume" onchange="App.setVolume()">
+         Volume:<input type="range" min="0" max="100" value="50" class="slider" id="volume" onchange="App.setVolume()">
         </div>
       </div>
     </div>

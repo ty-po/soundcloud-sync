@@ -22,7 +22,7 @@ var WS = {
     
     WS.raw.onopen = function(e) {
       console.log("[open] Connection established");
-      WS.sendMessage("open", WS.getUserName, true)
+      WS.sendMessage("open")
     };
 
     WS.raw.onmessage = function(event) {

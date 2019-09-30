@@ -323,7 +323,7 @@ var App = {
     SC.seek(time)
   },
 
-  //this function dont work for media keys since we cant pause our takeover audio
+  //this function dont work explicitly for media keys since we cant pause our takeover audio
   play:   function() {
     App.audio.play();
 

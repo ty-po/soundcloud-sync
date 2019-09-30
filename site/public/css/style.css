@@ -1,4 +1,10 @@
-  h1 {
+  .button-style {
+   margin-right: 20px;
+   margin-top: 20px;
+   margin-bottom: 20px;
+ }
+
+ h1 {
     font-family: 'Be Vietnam'. sans-serif;
     font-weight: 400;
     text-align: center;
@@ -21,4 +27,3 @@
 iframe {
     pointer-events: none; /* disable so we make sure to keep media key support lol */
 }
-

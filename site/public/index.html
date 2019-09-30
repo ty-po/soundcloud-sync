@@ -8,12 +8,12 @@
   <link href="https://fonts.googleapis.com/css?family=Be+Vietnam:300,400&display=swap" rel="stylesheet">
   <link href="https://fonts.googleapis.com/css?family=Mansalva&display=swap" rel="stylesheet">
   <!-- HEY! STOP LOOKING AT OUR SPAGHETTI CODE!  -->
-  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-HSMxcRTRxnN+Bdg0JdbxYKrThecOKuH5zCYotlSAcp1+c8xmyTe9GYg1l9a69psu" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="" crossorigin="anonymous">
   <body>
     <div>
      <div>
       <nav class="navbarg navbar-dark bg-dark navigation">
-	 <span class= "navbar-brand mb-0 h1">SoundCloud Sync</span>
+	 <span class= "navbar-brand mb-0 h1" style="padding-bottom: 35px;" >SoundCloud Sync</span>
       </nav>
       <div class=navigation  id="init">Click Here to Start</div>
      </div>
@@ -35,12 +35,14 @@
         </div>
       </div>
 
-
+ <div class="container">
+   <div class="row">
+     <div class="col text-center">
       <div id="controls"> 
-        <input type="button" class="control btn btn-primary" value="Play" onclick="if(WS.isMaster()) { App.play() }">
-        <input type="button" class="control btn btn-primary" value="Pause" onclick="if(WS.isMaster()) { App.pause() }">
-        <input type="button" class="control btn btn-primary" value="Prev" onclick="if(WS.isMaster()) { App.prev() }">
-        <input type="button" class="control btn btn-primary" value="Next"onclick="if(WS.isMaster()) { App.next() }">
+        <input type="button" class="control btn btn-success button-style" value="Play" onclick="if(WS.isMaster()) { App.play() }">
+        <input type="button" class="control btn btn-secondary button-style" value="Pause" onclick="if(WS.isMaster()) { App.pause() }">
+        <input type="button" class="control btn btn-secondary button-style" value="Prev" onclick="if(WS.isMaster()) { App.prev() }">
+        <input type="button" class="control btn btn-secondary button-style" value="Next"onclick="if(WS.isMaster()) { App.next() }">
         <div id="progress" style="width: 100%; height: 25px; outline-style: solid; outline-color: #2F2FA2">
           <div id="progress-bar" style="height: 25px; background-color: #F64C72; pointer-events: none">
           </div>
@@ -49,7 +51,9 @@
          Volume:<input type="range" min="1" max="100" value="50" class="slider" id="volume" onchange="App.setVolume()">
         </div>
       </div>
-
+    </div>
+   </div>
+ </div>
 
       <div id="soundcloud-player">
         <iframe class="iframe" width="100%" height="166" scrolling="no" frameborder="no" allow="autoplay"></iframe>

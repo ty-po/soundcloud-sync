@@ -93,16 +93,10 @@ var App = {
         });
       })
       //potentially set a interval to repeatedly play the dummy audio
-     var programStart =  document.getElementById("init")
+      var programStart =  document.getElementById("init")
 
-	    programStart.style.display = "none" //TODO:Scoot must fix tabbbb;
-	
-
-
-
-
-
-
+      programStart.style.display = "none" //Scott this is where you can change 
+      //loggin in
 
 
       var seekOnClick = function(e) {

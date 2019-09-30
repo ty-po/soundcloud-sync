@@ -1,5 +1,7 @@
 // WEBSOCKET "API" HERE
 var WS = {
+  debug: false,
+
   init:         function() {
 
     WS.raw = new WebSocket("ws://jump0.ty-po.com/ws")
@@ -20,8 +22,7 @@ var WS = {
     
     WS.raw.onopen = function(e) {
       console.log("[open] Connection established");
-      console.log("Sending user info");
-      WS.sendMessage("open")
+      WS.sendMessage("open", WS.getUserName, true)
     };
 
     WS.raw.onmessage = function(event) {
@@ -29,19 +30,15 @@ var WS = {
 
       data = JSON.parse(event.data)
 
-      if(!["position"].includes(data.type)) {
-        console.log(data)
-      }
+      if(WS.debug) console.log(data)
 
       if(["init"].includes(data.type)) {
         WS.queue = data.data
         WS.queueIndex = data.queueIndex
         App.url = WS.current();
-        console.log("here")
         var position = data.position
         App.load(App.url, function() {
-          console.log("here too")
-          console.log(data)
+          if(WS.debug) console.log(data)
           App.sync(position, data.time)
         })
       }
@@ -146,7 +143,7 @@ var WS = {
       time: Date.now()
     }
     var serialized = JSON.stringify(message)
-    console.log(serialized)
+    if(WS.debug) console.log(serialized)
     WS.raw.send(serialized)
   }
 }

@@ -30,7 +30,6 @@ sudo apt-get install ruby2.3-dev
 
 ## todo
 
-- cleanup sync
 - user on connect
 - userlist
 - skip to song button
@@ -48,7 +47,6 @@ sudo apt-get install ruby2.3-dev
 - queue send list instead of song by song
 - server side user identification and determination of who is allowed to broadcast
 - store song metadata server side, potentially track play info and added user too?
-- connected user list
 - typescript for front end
 - unit testing for both services
 - one line build/run process and directory monitoring

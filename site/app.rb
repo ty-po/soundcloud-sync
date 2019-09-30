@@ -35,9 +35,10 @@ class App
         data = JSON.parse(event.data)
 
         case data["type"]
-        when "open", "init"
+        when "open"
+          data["broadcast"] = true
+        when "init"
           data["data"] = @queue
-          data["type"] = "init"
           data["position"] = @position
           data["queueIndex"] = @queue_index
           data["broadcast"] = false

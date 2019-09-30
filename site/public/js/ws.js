@@ -3,7 +3,10 @@ var WS = {
   debug: false,
 
   init:         function() {
-
+    if(WS.raw) 
+      WS.raw.close()
+      WS.sendMessage("close")
+    }
     //WS.raw = new WebSocket("ws://" + window.location.hostname + "/ws")
     WS.raw = new WebSocket("ws://jump0.ty-po.com/ws")
 
@@ -15,14 +18,20 @@ var WS = {
         // event.code is usually 1006 in this case
         console.log('[close] Connection died');
       }
+
     };
 
     WS.raw.onerror = function(error) {
       console.log(`[error] ${error.message}`);
     };
     
+    window.addEventListener("beforeunload", function(event) {
+      WS.sendMessage("close")
+    })
+
     WS.raw.onopen = function(e) {
       console.log("[open] Connection established");
+      WS.sendMessage("init")
       WS.sendMessage("open")
     };
 
@@ -125,6 +134,8 @@ var WS = {
   raw: null,
 
   ready:        false,
+
+  userList: [],
 
   getUserName:  function() {
     return document.getElementById('username').value

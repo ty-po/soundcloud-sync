@@ -3,12 +3,14 @@ var WS = {
   debug: false,
 
   init:         function() {
-    if(WS.raw) 
-      WS.raw.close()
+    if (WS.raw) {
       WS.sendMessage("close")
+      WS.raw.close()
     }
-    //WS.raw = new WebSocket("ws://" + window.location.hostname + "/ws")
+    
     WS.raw = new WebSocket("ws://jump0.ty-po.com/ws")
+    //WS.raw = new WebSocket("ws://" + window.location.hostname + "/ws")
+
 
     WS.raw.onclose = function(event) {
       if (event.wasClean) {

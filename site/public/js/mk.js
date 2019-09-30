@@ -9,7 +9,7 @@ navigator.mediaSession.setActionHandler = navigator.mediaSession.setActionHandle
 window.MediaMetadata = window.MediaMetadata || function() {};
 
 function updateMetadata(metadata) {
-  console.log('updating metadata')
+  //console.log('updating metadata')
   //update media preview metadata
   navigator.mediaSession.metadata = metadata
   App.renderQueue()
@@ -46,6 +46,8 @@ widget.bind("playProgress", function(data) {
 
 //OKAY THIS IS GROSS I KNOW BUT API IS HERE
 var App = {
+
+  debug: false,
 
   currentPosition: 0,
   currentDuration: 0,
@@ -98,7 +100,7 @@ var App = {
         var size = e.target.clientWidth
         var x = e.clientX - rect.left;
         //var y = e.clientY - rect.top;
-        console.log(x,size)
+        //console.log(x,size)
 
         var targetTimecode = App.currentDuration * (x / size)
 
@@ -273,7 +275,7 @@ var App = {
   },
 
   load:   function(url, cb) {
-    console.log("loading")
+    if(App.debug) console.log("loading")
     SC.load(url, function(){
       App.synced = false
       App.playing = false
@@ -298,7 +300,7 @@ var App = {
       var targetTime = trackTime + (eventOffset) //+ App.syncAdjustment
       var syncAdjustment = eventOffset - playerOffset
 
-      console.log("Sync", syncAdjustment, App.synced)
+      if(App.debug) console.log("Sync", syncAdjustment, App.synced)
 
       if (Math.abs(syncAdjustment) > 75) { // if we are way off likely the track is still loading
         App.seek(targetTime)
@@ -316,7 +318,7 @@ var App = {
 
   seek:   function(time) {
     App.synced = false
-    console.log("seek " + time)
+    if(App.debug) console.log("seek " + time)
     WS.sendMessage("seek:"+time)
     SC.seek(time)
   },
@@ -327,7 +329,7 @@ var App = {
 
     App.playing = true;
     WS.sendMessage("play");
-    console.log("play");
+    if(App.debug) console.log("play");
     App.setVolume();
     SC.play();
 
@@ -338,7 +340,7 @@ var App = {
 
     App.playing = false;
     WS.sendMessage("pause");
-    console.log("pause");
+    if(App.debug) console.log("pause");
     SC.pause();
 
 
@@ -346,7 +348,7 @@ var App = {
 
   prev:   function() {
     WS.sendMessage("prev");
-    console.log("prev");
+    if(App.debug) console.log("prev");
 
     App.url = WS.prev()
     App.load(App.url, App.play)
@@ -354,7 +356,7 @@ var App = {
 
   next:   function() {
     WS.sendMessage("next");
-    console.log("next");
+    if(App.debug) console.log("next");
 
     App.url = WS.next()
     App.load(App.url, App.play)

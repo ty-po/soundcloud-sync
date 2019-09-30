@@ -31,7 +31,8 @@ sudo apt-get install ruby2.3-dev
 ## todo
 
 - cleanup sync
-- scrubbing
+- user on connect
+- userlist
 - skip to song button
 - soundcloud link as part of image in table
 - pause music when master disconnects

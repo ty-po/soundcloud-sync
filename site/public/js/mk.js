@@ -244,14 +244,13 @@ var App = {
 
   load:   function(url, cb) {
     console.log("loading")
-    App.synced = false
     SC.load(url, function(){
+      App.synced = false
+      App.playing = false
       SC.getCurrentMetadata(updateMetadata)
       if(cb) {
         cb()
       }
-
-      App.playing = false;
     })
   },
   
@@ -261,22 +260,21 @@ var App = {
 
     var playerTime = SC.getTime(function(playerTime) {
       var clientTime = Date.now();
-      console.log(trackTime, broadcastTime, playerTime, clientTime)
 
+      //I think I want these to be equal
       var eventOffset = clientTime - broadcastTime
       var playerOffset = playerTime - trackTime
 
       var targetTime = trackTime + (eventOffset) //+ App.syncAdjustment
       var syncAdjustment = eventOffset - playerOffset
 
-      //I think I want these to be equal
-      console.log(eventOffset, playerOffset)
-      console.log(syncAdjustment)
+      console.log("Sync", syncAdjustment, App.synced)
 
-      if (syncAdjustment > 75) { // if we are way off likely the track is still loading
+      if (Math.abs(syncAdjustment) > 75) { // if we are way off likely the track is still loading
         App.seek(targetTime)
+        App.synced = false
       }
-      else if(Math.abs(syncAdjustment) > 6 && !App.synced) {
+      else if(Math.abs(syncAdjustment) > 5 && !App.synced) {
         App.seek(targetTime + syncAdjustment)
       }
       else {
@@ -295,20 +293,22 @@ var App = {
   play:   function() {
     App.audio.play();
 
+    App.playing = true;
     WS.sendMessage("play");
     console.log("play");
     App.setVolume();
     SC.play();
-    App.playing = true;
+
 
   },
 
   pause:  function() {
 
+    App.playing = false;
     WS.sendMessage("pause");
     console.log("pause");
     SC.pause();
-    App.playing = false;
+
 
   },
 

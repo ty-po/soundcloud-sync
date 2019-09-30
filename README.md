@@ -30,7 +30,6 @@ sudo apt-get install ruby2.3-dev
 
 ## todo
 
-- make sync binary search
 - scrubbing
 - skip to song button
 - soundcloud link as part of image in table

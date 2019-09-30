@@ -93,7 +93,11 @@ var App = {
         });
       })
       //potentially set a interval to repeatedly play the dummy audio
-      document.getElementById("init").innerHTML = "Soundcloud Sync"
+      var programStart =  document.getElementById("init")
+
+      programStart.style.display = "none" //Scott this is where you can change 
+      //loggin in
+
 
       var seekOnClick = function(e) {
         var rect = e.target.getBoundingClientRect();

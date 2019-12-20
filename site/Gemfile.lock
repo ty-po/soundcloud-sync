@@ -8,7 +8,7 @@ GEM
     nio4r (2.5.1)
     puma (4.1.1)
       nio4r (~> 2.0)
-    rack (2.0.7)
+    rack (2.0.8)
     websocket-driver (0.7.1)
       websocket-extensions (>= 0.1.0)
     websocket-extensions (0.1.4)
